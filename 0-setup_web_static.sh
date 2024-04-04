@@ -37,24 +37,33 @@ sudo chwon -R ubuntu:ubuntu /data/
 # update the default file
 sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
 server {
-        listen 80;
+        listen 80 default_server;
+        error_page 404 /404.html;
+        location = /404.html {
+                root /var/www/html;
+                internal;
+        }
         listen [::]:80 default_server;
-        server_name _;
-        add_header X-Served-By "${HOSTNAME}";
-        location /redirect_me {
-                return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-        }
-        location @404 {
-                 return 404 "Ceci n'est pas une page.";
-        }
 
         location /hbnb_static {
                  alias /data/web_static/current/;
         }
 
-
         root /var/www/html;
-        error_page 404 = @404;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+        rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;
+
+        
+        location / {
+        # Added by me
+        add_header X-Served-By $hostname;
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+        }
 }
 EOF
 # restart nginx
