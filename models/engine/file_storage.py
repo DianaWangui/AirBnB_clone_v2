@@ -13,7 +13,8 @@ class FileStorage:
         if cls:
             for key, value in self.__objects.items():
                 if isinstance(value, cls):
-                    return key: value
+                    result[key] = value
+                    return result
         return self.__objects
 
     def new(self, obj):
