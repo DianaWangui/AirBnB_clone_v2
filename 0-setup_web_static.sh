@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Install nginx and create directories
-sudo apt-get update
+# update packages abd install nginx and create directories
+sudo apt-get -y update
 sudo apt-get install -y nginx
-# create directories and files to create if they dont exist
+
+# directories and files 
 directories=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/" "/data/web_static/releases/test/")
 
 # loops through to check if they exist if not create them
@@ -23,6 +24,10 @@ sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
 </html>
 EOF
 
+# delete the symbolic link if it exists
+if [ -L "/data/web_static/current" ]; then
+    sudo rm /data/web_static/current
+fi
 # create a symbolic link
 sudo ln -sfn /data/web_static/releases/test/ /data/web_static/current
 
