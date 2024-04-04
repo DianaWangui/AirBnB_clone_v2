@@ -4,7 +4,6 @@ sudo apt-get -y update
 sudo apt-get install -y nginx
 
 # directories and files 
-#creating directories
 directories=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/" "/data/web_static/releases/test/")
 for dir in "${directories[@]}"; do
     if [ ! -d "$dir" ]; then
