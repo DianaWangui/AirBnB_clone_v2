@@ -255,7 +255,7 @@ class HBNBCommand(cmd.Cmd):
             # Retrieve all objects of the specified class
             if args in HBNBCommand.classes:
                 cls = HBNBCommand.classes[args]
-                objects = storage.all()
+                objects = storage.all(cls)
 
             for obj in objects.values():
                 print_list.append(str(obj))
