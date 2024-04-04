@@ -22,12 +22,29 @@ cat <<EOF /data/web_static/releases/test/index.html
 EOF
 
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+
 run("sudo chwon -R ubuntu:ubuntu /data/")
 
 cat <<EOF /etc/nginx/sites-available/default
 server {
-    location /hbnb_static {
-        alias /data/web_static/current/;
-    }
+        listen 80;
+        listen [::]:80 default_server;
+        server_name _;
+        add_header X-Served-By "${HOSTNAME}";
+        location /redirect_me {
+                return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+        }
+        location @404 {
+                 return 404 "Ceci n'est pas une page.";
+        }
+
+        location /hbnb_static {
+                 alias /data/web_static/current/;
+        }
+
+
+        root /var/www/html;
+        error_page 404 = @404;
 }
 EOF
+sudo service nginx restart
