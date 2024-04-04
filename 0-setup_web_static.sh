@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
-# Install nginx and create directories
-sudo apt-get update
-sudo apt-get install -y nginx
+# a Bash script that sets up your web servers for the deployment of web_static
 
+# update package managers
+sudo apt-get -y update
+
+# install nginx
+sudo apt-get -y install nginx
+
+#creating directories
 directories=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/" "/data/web_static/releases/test/")
-
 for dir in "${directories[@]}"; do
     if [ ! -d "$dir" ]; then
         sudo mkdir -p "$dir"
     fi
 done
 
-sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
+# create html file
+sudo tee /data/web_static/releases/test/index.html > /dev/null << EOF
 <html>
   <head>
   </head>
@@ -21,11 +26,22 @@ sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
 </html>
 EOF
 
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+# creating symbolic link
+target="/data/web_static/releases/test/"
+link="/data/web_static/current"
 
-run("sudo chwon -R ubuntu:ubuntu /data/")
+# Check if the symbolic link already exists and delete it
+if [ -L "$link" ]; then
+    sudo rm -r "$link"
+fi
 
-sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
+# Create the symbolic link
+sudo ln -sfn "$target" "$link"
+
+# giving owndership of data directory to user and group ubuntu
+sudo chown -R ubuntu:ubuntu /data/
+
+sudo tee /etc/nginx/sites-available/default >/dev/null <<EOF
 server {
         listen 80;
         listen [::]:80 default_server;
@@ -47,4 +63,5 @@ server {
         error_page 404 = @404;
 }
 EOF
+
 sudo service nginx restart
