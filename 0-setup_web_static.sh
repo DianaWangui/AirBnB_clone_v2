@@ -23,17 +23,9 @@ sudo tee /data/web_static/releases/test/index.html > /dev/null << EOF
 </html>
 EOF
 
-# creating symbolic link
-target="/data/web_static/releases/test/"
-link="/data/web_static/current"
-
 # Check if the symbolic link already exists and delete it
-if [ -L "$link" ]; then
-    sudo rm -r "$link"
-fi
-
-# Create the symbolic link
-sudo ln -sfn "$target" "$link"
+rm -rf /data/web_static/current
+ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # giving owndership of data directory to user and group ubuntu
 sudo chown -R ubuntu:ubuntu /data/
