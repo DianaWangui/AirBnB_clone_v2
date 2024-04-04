@@ -39,8 +39,9 @@ class DBStorage:
         objects = {}
         if cls:
             object_list = self.__session.query(cls).all()
+            # print(object_list)
             for obj in object_list:
-                objects[f"{obj._class.name_}.{obj.id}"] = obj
+                objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
         else:
             classes = {
                     'User': User, 'Place': Place,
@@ -50,7 +51,7 @@ class DBStorage:
             # loop each class to query for its table
             for class_name, class_ in classes.items():
                 # returns a list of obj of the queried class
-                object_list = self._session.query(class).all()
+                object_list = self.__session.query(class_).all()
                 for obj in object_list:
                     objects[f"{class_name}.{obj.id}"] = obj
         return objects
