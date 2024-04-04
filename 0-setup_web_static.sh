@@ -2,15 +2,17 @@
 # Install nginx and create directories
 sudo apt-get update
 sudo apt-get install -y nginx
-
+# create directories and files to create if they dont exist
 directories=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/" "/data/web_static/releases/test/")
 
+# loops through to check if they exist if not create them
 for dir in "${directories[@]}"; do
     if [ ! -d "$dir" ]; then
         sudo mkdir -p "$dir"
     fi
 done
 
+# create a fake html file and append to the index.html file
 sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
 <html>
   <head>
@@ -21,10 +23,13 @@ sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
 </html>
 EOF
 
+# create a symbolic link
 sudo ln -sfn /data/web_static/releases/test/ /data/web_static/current
 
+# change ownership of the /data/ folder
 sudo chwon -R ubuntu:ubuntu /data/
 
+# update the default file
 sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
 server {
         listen 80;
@@ -47,4 +52,5 @@ server {
         error_page 404 = @404;
 }
 EOF
+# restart nginx
 sudo service nginx restart
