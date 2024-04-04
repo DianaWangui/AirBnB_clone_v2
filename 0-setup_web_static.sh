@@ -11,7 +11,7 @@ for dir in "${directories[@]}"; do
     fi
 done
 
-cat <<EOF /data/web_static/releases/test/index.html
+sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
 <html>
   <head>
   </head>
@@ -25,7 +25,7 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 run("sudo chwon -R ubuntu:ubuntu /data/")
 
-cat <<EOF /etc/nginx/sites-available/default
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
 server {
         listen 80;
         listen [::]:80 default_server;
