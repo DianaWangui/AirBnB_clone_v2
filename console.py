@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -114,38 +114,63 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """Create an object of any class"""
+        """ Create an object of any class"""
         if not args:
-            print("** class name missing **")
+            print("* class name missing *")
             return
-        args_array = args.split()
-        class_name = args_array[0]
-        if class_name not in HBNBCommand.classes:
-            print("** class doesn't exist **")
+
+        # split string of arguments passed into separate tokens of arguments
+        args_list = args.split()
+
+        # check if first argument is one of the classes of models
+        if args_list[0] not in HBNBCommand.classes:
+            print("* class doesn't exist *")
             return
-        new_instance = HBNBCommand.classes[class_name]()
-        for param_index in range(1, len(args_array)):
-            param_array = args_array[param_index].split("=")
-            if len(param_array) == 2:
-                key = param_array[0]
-                if key not in HBNBCommand.valid_keys[class_name]:
+
+        # check for additional arguments
+        if len(args_list) > 1:
+
+            # variable arguments to be passed as object attributes
+            kwargs = {}
+
+        # iterate over list of arguments
+            for i in range(1, len(args_list)):
+
+                # split argument into key: value pair
+                key_val = args_list[i].split('=')
+                if len(key_val) != 2:
                     continue
-                value = self.parse_value(param_array[1])
-                if value is not None:
-                    setattr(new_instance, key, value)
-            else:
-                pass
-        new_instance.save()
-        print(new_instance.id)
+                key = key_val[0]
 
+                if not hasattr(HBNBCommand.classes[args_list[0]], key):
+                    continue
 
-        # elif args not in HBNBCommand.classes:
-        #     print("** class doesn't exist **")
-        #     return
-        # new_instance = HBNBCommand.classes[args]()
-        # storage.save()
-        # print(new_instance.id)
-        # storage.save()
+                # check for string, float, and integer in value
+                if '\"' in key_val[1]:
+                    val = key_val[1].replace('\"', '').replace('_', ' ')
+                elif '.' in key_val[1]:
+                    try:
+                        val = float(key_val[1])
+                    except ValueError:
+                        continue
+                else:
+                    try:
+                        val = int(key_val[1])
+                    except ValueError:
+                        continue
+
+                # append key: value pair to kwargs
+                kwargs.update({key: val})
+            new_instance = HBNBCommand.classes[args_list[0]](**kwargs)
+            storage.reload()
+            new_instance.save()
+            print(new_instance.id)
+        else:
+            new_instance = HBNBCommand.classes[args]()
+            new_instance.save()
+            print(new_instance.id)
+            
+        
 
     def help_create(self):
         """ Help information for the create method """
@@ -225,14 +250,20 @@ class HBNBCommand(cmd.Cmd):
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
-                print("** class doesn't exist **")
+                print("* class doesn't exist *")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            # Retrieve all objects of the specified class
+            if args in HBNBCommand.classes:
+                cls = HBNBCommand.classes[args]
+                objects = storage.all()
+
+            for obj in objects.values():
+                print_list.append(str(obj))
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
+            # Retrieve all objects
+            objects = storage.all()
+            for obj in objects.values():
+                print_list.append(str(obj))
 
         print(print_list)
 
