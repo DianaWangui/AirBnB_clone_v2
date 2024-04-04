@@ -24,12 +24,17 @@ sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
 </html>
 EOF
 
-# delete the symbolic link if it exists
-if [ -L "/data/web_static/current" ]; then
-    sudo rm /data/web_static/current
+# creating symbolic link
+target="/data/web_static/releases/test/"
+link="/data/web_static/current"
+
+# Check if the symbolic link already exists and delete it
+if [ -L "$link" ]; then
+    sudo rm -r "$link"
 fi
-# create a symbolic link
-sudo ln -sfn /data/web_static/releases/test/ /data/web_static/current
+
+# Create the symbolic link
+sudo ln -sfn "$target" "$link"
 
 # change ownership of the /data/ folder
 sudo chwon -R ubuntu:ubuntu /data/
