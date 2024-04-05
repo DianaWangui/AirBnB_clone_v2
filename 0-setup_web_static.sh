@@ -3,13 +3,9 @@
 sudo apt-get -y update
 sudo apt-get install -y nginx
 
-# directories and files 
-directories=("/data/" "/data/web_static/" "/data/web_static/releases/" "/data/web_static/shared/" "/data/web_static/releases/test/")
-for dir in "${directories[@]}"; do
-    if [ ! -d "$dir" ]; then
-        sudo mkdir -p "$dir"
-    fi
-done
+# Creating files and directories
+mkdir -p /data/web_static/releases/test/index.html
+mkdir -p /data/web_static/shared/
 
 # create html file
 sudo tee /data/web_static/releases/test/index.html > /dev/null << EOF
