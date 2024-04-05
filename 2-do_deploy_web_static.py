@@ -59,7 +59,8 @@ def do_deploy(archive_path):
 
         # Delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
-        path_s = f"/data/web_static/curren"
+
+        path_s = f"/data/web_static/current"
         # Create a new symbolic link
         run(f"sudo ln -s /data/web_static/releases/{file_name}/ {path_s}")
 
