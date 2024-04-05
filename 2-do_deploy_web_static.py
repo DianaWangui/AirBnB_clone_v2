@@ -8,8 +8,8 @@ from datetime import datetime
 
 env.hosts = ['54.237.118.67', '52.91.146.16']
 env.username = 'ubuntu'
-env.key_filename = '~/.ssh/id_rsa'
-# /root/.ssh/id_rsa
+env.key_filename = '/root/.ssh/id_rsa'
+# '~/.ssh/id_rsa'
 
 
 def do_pack():
