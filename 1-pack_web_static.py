@@ -1,8 +1,11 @@
 #!/usr/bin/python3
-"""Fabric script that generates a .tgz archive from the contents of the web_static folder of your AirBnB Clone repo"""
+"""
+Fabric script that generates a .tgz archive from the
+contents of the web_static folder of your AirBnB Clone repo."""
 import os
 from fabric.api import *
 from datetime import datetime
+
 
 def do_pack():
     """Function to generate a .tgz archive"""
@@ -22,7 +25,3 @@ def do_pack():
         print(f"web_static packed: {file_path} -> {file_size}Bytes")
     else:
         return None
-    
-    
-
-    
