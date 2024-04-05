@@ -4,8 +4,8 @@ sudo apt-get -y update
 sudo apt-get install -y nginx
 
 # Creating files and directories
-mkdir -p /data/web_static/releases/test/index.html
-mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/index.html
+sudo mkdir -p /data/web_static/shared/
 
 # create html file
 sudo tee /data/web_static/releases/test/index.html > /dev/null << EOF
