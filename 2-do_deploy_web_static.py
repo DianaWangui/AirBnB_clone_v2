@@ -30,6 +30,7 @@ def do_pack():
     else:
         return None
 
+
 # Path: 2-do_deploy_web_static.py
 def do_deploy(archive_path):
     """
@@ -48,23 +49,23 @@ def do_deploy(archive_path):
 
         # Create the directory to uncompress the file
         run(f"sudo mkdir -p /data/web_static/releases/{archive_name}")
-
+        path = f"/data/web_static/releases/{file_name}"
         # Uncompress the file into the created directory
-        run(f"sudo tar -xzf /tmp/{archive_name} -C /data/web_static/releases/{file_name}")
+        run(f"sudo tar -xzf /tmp/{archive_name} -C {path}")
 
         # Delete the archive from the web server
         run(f"sudo rm /tmp/{archive_name}")
 
-
         # Delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
-
+        path_s = f"/data/web_static/curren"
         # Create a new symbolic link
-        run(f"sudo ln -s /data/web_static/releases/"{file_name}"/ /data/web_static/current")
+        run(f"sudo ln -s /data/web_static/releases/{file_name}/ {path_s}")
 
         # Finish the deployment
         print("New version deployed!")
-        return True
-
-    except:
+    except Exception as e:
+        print(e)
         return False
+    # Return True if the deployment was successful
+    return True
