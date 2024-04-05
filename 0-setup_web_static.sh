@@ -4,7 +4,7 @@ sudo apt-get -y update
 sudo apt-get install -y nginx
 
 # Creating files and directories
-sudo mkdir -p /data/web_static/releases/test/index.html
+sudo mkdir -p /data/web_static/releases/test
 sudo mkdir -p /data/web_static/shared/
 
 # create html file
