@@ -11,6 +11,7 @@ env.username = 'ubuntu'
 env.key_filename = '/root/.ssh/id_rsa'
 # '~/.ssh/id_rsa'
 
+
 @task
 def do_pack():
     """Function to generate a .tgz archive"""
@@ -78,7 +79,9 @@ def do_deploy(archive_path):
 @task
 def deploy():
     """
-    Fabric script (based on the file 2-do_deploy_web_static.py) that creates and distributes an archive to your web servers, using the function deploy.
+    Fabric script (based on the file 2-do_deploy_web_static.py)
+    that creates and distributes an archive to your web servers,
+    using the function deploy.
     """
     archive_path = do_pack()
     if archive_path is None:
