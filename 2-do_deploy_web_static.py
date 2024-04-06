@@ -11,7 +11,7 @@ env.username = 'ubuntu'
 env.key_filename = '/root/.ssh/id_rsa'
 # '~/.ssh/id_rsa'
 
-
+@task
 def do_pack():
     """Function to generate a .tgz archive"""
     # Creating the folder versions
@@ -33,6 +33,7 @@ def do_pack():
 
 
 # Path: 2-do_deploy_web_static.py
+@task
 def do_deploy(archive_path):
     """
     Fabric script (based on the file 1-pack_web_static.py
@@ -62,7 +63,7 @@ def do_deploy(archive_path):
 
         path_s = f"/data/web_static/current"
         # Create a new symbolic link
-        run(f"sudo ln -s /data/web_static/releases/{file_name}/ {path_s}")
+        run(f"sudo ln -sf /data/web_static/releases/{file_name}/ {path_s}")
 
         # Finish the deployment
         print("New version deployed!")
