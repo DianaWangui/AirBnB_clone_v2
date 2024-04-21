@@ -10,13 +10,13 @@ from models.city import City
 
 app = Flask(__name__)
 states = storage.all(State)
-cities = storage.all(City)
+cts = storage.all(City)
 
 
 @app.route('/cities_by_states', strict_slashes=False)
 def states_list():
     """Display a HTML page."""
-    return render_template('8-cities_by_states.html', states=states, cities=cities)
+    return render_template('8-cities_by_states.html', states=states, cts=cts)
 
 
 @app.teardown_appcontext
