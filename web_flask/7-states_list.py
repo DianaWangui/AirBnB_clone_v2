@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Start link class to table in database."""
 from flask import Flask, render_template
+from markupsafe import escape
 from models import storage
 from models.state import State
 
@@ -15,7 +16,7 @@ def states_list():
 
 
 @app.teardown_appcontext
-def close_session(exception):
+def close_session(exception=None):
     """Remove the current SQLAlchemy Session."""
     storage.close()
 
