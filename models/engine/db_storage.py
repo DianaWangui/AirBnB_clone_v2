@@ -39,7 +39,6 @@ class DBStorage:
         objects = {}
         if cls:
             object_list = self.__session.query(cls).all()
-            # print(object_list)
             for obj in object_list:
                 objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
         else:
@@ -75,3 +74,7 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(Session)
+
+    def close(self):
+        """ Close the session """
+        self.__session.close()
