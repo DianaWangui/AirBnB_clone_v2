@@ -16,7 +16,7 @@ cts = storage.all(City)
 @app.route('/states', strict_slashes=False)
 def list_states():
     """Display a HTML page."""
-    return render_template('9-states.html', states=states, cts=cts)
+    return render_template('7-states_list.html', states=states)
 
 @app.route('/states/<id>', strict_slashes=False)
 def list_state(id):
