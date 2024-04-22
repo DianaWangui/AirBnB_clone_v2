@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Start link class to table in database."""
 from flask import Flask, render_template
 from markupsafe import escape
